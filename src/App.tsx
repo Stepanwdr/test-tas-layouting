@@ -68,7 +68,7 @@ function App() {
       </main>
 
       <Modal open={!!selected} onClose={() => setSelected(null)} title={selected?.title}>
-        <p>{normalizeText(selected || { title: '' })}</p>
+        <p>{selected && normalizeText(selected )}</p>
       </Modal>
     </div>
   )
