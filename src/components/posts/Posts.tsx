@@ -1,9 +1,9 @@
 import { type ReactNode } from 'react'
-import PostCard from './PostCard.tsx'
+import PostCard from './PostCard'
 import './posts.css'
-import type { Post } from "../../types/Post.ts";
+import type { Post } from "../../shared/types/Post.ts";
 
-export function PostsGrid({ posts, onSelect, topNode }: { posts: Post[]; onSelect: (p: Post) => void; topNode?: ReactNode }) {
+export function Posts({ posts, onSelect, topNode }: { posts: Post[]; onSelect: (p: Post) => void; topNode?: ReactNode }) {
   return (
     <section className="posts-section container">
       {topNode}
@@ -16,4 +16,4 @@ export function PostsGrid({ posts, onSelect, topNode }: { posts: Post[]; onSelec
   )
 }
 
-export default PostsGrid
+export default Posts

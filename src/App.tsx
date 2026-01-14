@@ -1,10 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import Header from './components/header/Header.tsx'
-import MobileMenu from './components/mobile-menu/MobileMenu.tsx'
-import PostsGrid from './components/Posts/PostsGrid.tsx'
-import Modal from './components/modal/Modal.tsx'
+import MobileMenu from './components/mobile-menu/MobileMenu'
+import Posts from './components/posts/Posts.tsx'
+import Modal from './shared/ui/modal/Modal.tsx'
+import type { Post } from "./shared/types/Post";
+import { Nav } from "./components/header/nav/Nav.tsx";
+import { useScrollDirection } from "./shared/models/useScrollDirection";
+import { menuItems } from "./shared/mocks/menuItems";
 import './index.css'
-import type { Post } from "./types/Post";
 
 function normalizeText(p: Post) {
   return [p.text, p.subtitle, p.description].filter(Boolean).join(' ')
@@ -17,6 +20,8 @@ function App() {
   const [error, setError] = useState<string | null>(null)
   const [selected, setSelected] = useState<Post | null>(null)
   const [query, setQuery] = useState('')
+
+  const { direction, passedThreshold } = useScrollDirection(200)
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -54,8 +59,8 @@ function App() {
   return (
     <div>
       <Header onOpenMobile={() => setMobileOpen(true)} setQuery={setQuery} />
+      <Nav  menuItems={menuItems} direction={direction} passedThreshold={passedThreshold} />
       <MobileMenu open={mobileOpen} onClose={() => setMobileOpen(false)} />
-
       <main>
         {loading && <div className="container" style={{ padding: '1rem' }}>Загрузка…</div>}
         {error && <div className="container" style={{ padding: '1rem', color: 'crimson' }}>{error}</div>}
@@ -63,10 +68,9 @@ function App() {
           <div className="container" style={{ padding: '1rem' }}>Ничего не найдено</div>
         )}
         {!loading && !error && filtered.length > 0 && (
-          <PostsGrid posts={filtered} onSelect={setSelected} />
+          <Posts posts={filtered} onSelect={setSelected} />
         )}
       </main>
-
       <Modal open={!!selected} onClose={() => setSelected(null)} title={selected?.title}>
         <p>{selected && normalizeText(selected )}</p>
       </Modal>

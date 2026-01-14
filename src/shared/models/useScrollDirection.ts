@@ -1,10 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 
-/**
- * Tracks scroll direction and offset from top.
- * - direction: 'up' | 'down'
- * - passedThreshold: whether the user scrolled more than thresholdPx
- */
 export function useScrollDirection(thresholdPx: number = 200) {
   const [direction, setDirection] = useState<'up' | 'down'>('up')
   const [passedThreshold, setPassedThreshold] = useState(false)

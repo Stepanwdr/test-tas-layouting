@@ -1,5 +1,5 @@
 import './posts.css'
-import type { Post } from "../../types/Post.ts";
+import type { Post } from "../../shared/types/Post.ts";
 
 export function PostCard({ post, onClick }: { post: Post; onClick: (p: Post) => void }) {
   const title = post.title

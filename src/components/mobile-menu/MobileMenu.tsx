@@ -1,8 +1,11 @@
 import { useEffect } from 'react'
 import logo from "../../assets/logo.png"
 import './mobile-menu.css'
+import { menuItems } from "../../shared/mocks/menuItems";
+import { NavItem } from "../header/nav/NavItem";
 
 export function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
@@ -20,12 +23,24 @@ export function MobileMenu({ open, onClose }: { open: boolean; onClose: () => vo
           </div>
           <button className="icon-btn" aria-label="Закрыть" onClick={onClose}>×</button>
         </div>
-        <nav className="drawer-nav">
-          <a href="#" onClick={onClose}>Главная</a>
-          <a href="#" onClick={onClose}>Новости</a>
-          <a href="#" onClick={onClose}>Авторы</a>
-          <a href="#" onClick={onClose}>Контакты</a>
-        </nav>
+        <ul className='drawer-nav'>
+          <NavItem label="Demos" items={menuItems.Demos} />
+          <NavItem label="Post" items={menuItems.Post} />
+          <NavItem label="Features" items={menuItems.Features} />
+          <NavItem
+            label="Categories"
+            items={menuItems.Categories}
+          />
+          <NavItem
+            label="Shop"
+            items={menuItems.Shop}
+          />
+          <NavItem
+            withArrow={false}
+            label="Buy Now"
+            items={[]}
+          />
+        </ul>
       </div>
       {open && <div className="backdrop" onClick={onClose} />}
     </>
