@@ -1,7 +1,14 @@
-import './posts.css'
-import type { Post } from "../../shared/types/Post.ts";
+import type { FC } from "react";
+import type { Post } from "../../shared/types/Post";
 
-export function PostCard({ post, onClick }: { post: Post; onClick: (p: Post) => void }) {
+import './posts.css';
+
+interface Props {
+  post: Post;
+  onClick: (p: Post) => void
+}
+
+export const PostCard:FC<Props> =({ post, onClick }) => {
   const title = post.title
   const desc = post.text || post.subtitle || post.description || ''
   const img = post.img
@@ -35,5 +42,3 @@ export function PostCard({ post, onClick }: { post: Post; onClick: (p: Post) => 
     </article>
   )
 }
-
-export default PostCard

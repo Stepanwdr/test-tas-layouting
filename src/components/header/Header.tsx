@@ -1,14 +1,23 @@
-import { useEffect, useRef, useState } from 'react'
+import { type FC, useEffect, useRef, useState } from 'react'
 import logo from "../../assets/logo.png"
 import searchIcon from "../../assets/search.png"
 import BurgerIcon from "../../assets/burger.svg"
 import './header.css'
 
-export function Header({ onOpenMobile, setQuery }: { onOpenMobile: () => void,setQuery: (query: string) => void }) {
+interface Props {
+  onOpenMobile: () => void,
+  setQuery: (query: string) => void
+}
+
+export const Header: FC<Props>=({ onOpenMobile, setQuery }) =>{
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const searchInputRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => { if (isSearchOpen) { searchInputRef.current?.focus() } }, [isSearchOpen])
+  useEffect(() => {
+    if (isSearchOpen) {
+      searchInputRef.current?.focus()
+      }
+    }, [isSearchOpen])
 
   return (
     <header className="site-header">
@@ -55,5 +64,3 @@ export function Header({ onOpenMobile, setQuery }: { onOpenMobile: () => void,se
     </header>
   )
 }
-
-export default Header

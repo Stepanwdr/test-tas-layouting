@@ -1,79 +1,22 @@
-import { useEffect, useMemo, useState } from 'react'
-import Header from './components/header/Header.tsx'
-import MobileMenu from './components/mobile-menu/MobileMenu'
-import Posts from './components/posts/Posts.tsx'
-import Modal from './shared/ui/modal/Modal.tsx'
-import type { Post } from "./shared/types/Post";
-import { Nav } from "./components/header/nav/Nav.tsx";
+import { useState } from 'react'
 import { useScrollDirection } from "./shared/models/useScrollDirection";
 import { menuItems } from "./shared/mocks/menuItems";
+import {Header, MobileMenu, Nav, Posts} from "./components";
 import './index.css'
 
-function normalizeText(p: Post) {
-  return [p.text, p.subtitle, p.description].filter(Boolean).join(' ')
-}
 
-function App() {
+const App= ()=> {
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [posts, setPosts] = useState<Post[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [selected, setSelected] = useState<Post | null>(null)
-  const [query, setQuery] = useState('')
-
   const { direction, passedThreshold } = useScrollDirection(200)
-
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase()
-    if (!q) return posts
-    return posts.filter(p => {
-      const title = p.title?.toLowerCase() || ''
-      const text = normalizeText(p).toLowerCase()
-      return title.includes(q) || text.includes(q)
-    })
-  }, [posts, query])
-
-
-  useEffect(() => {
-    let cancelled = false
-    async function load() {
-      try {
-        setLoading(true)
-        const res = await fetch('https://cloud.codesupply.co/endpoint/react/data.json')
-        if (!res.ok) throw new Error('Network error')
-        const data = await res.json()
-        if (!cancelled) {
-          setPosts(data)
-          setError(null)
-        }
-      } catch (e: any) {
-        if (!cancelled) setError(e?.message || 'Ошибка загрузки')
-      } finally {
-        if (!cancelled) setLoading(false)
-      }
-    }
-    load()
-    return () => { cancelled = true }
-  }, [])
-
+  const [query, setQuery] = useState('')
   return (
     <div>
       <Header onOpenMobile={() => setMobileOpen(true)} setQuery={setQuery} />
-      <Nav  menuItems={menuItems} direction={direction} passedThreshold={passedThreshold} />
       <MobileMenu open={mobileOpen} onClose={() => setMobileOpen(false)} />
+      <Nav menuItems={menuItems} direction={direction} passedThreshold={passedThreshold} />
       <main>
-        {loading && <div className="container" style={{ padding: '1rem' }}>Загрузка…</div>}
-        {error && <div className="container" style={{ padding: '1rem', color: 'crimson' }}>{error}</div>}
-        {!loading && !error && filtered.length === 0 && (
-          <div className="container" style={{ padding: '1rem' }}>Ничего не найдено</div>
-        )}
-        {!loading && !error && filtered.length > 0 && (
-          <Posts posts={filtered} onSelect={setSelected} />
-        )}
+        <Posts query={query} />
       </main>
-      <Modal open={!!selected} onClose={() => setSelected(null)} title={selected?.title}>
-        <p>{selected && normalizeText(selected )}</p>
-      </Modal>
     </div>
   )
 }

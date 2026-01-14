@@ -1,19 +1,20 @@
+import type { FC } from "react";
 import { NavItem } from "./NavItem.tsx";
 import type { MenuItem } from "../../../shared/types/Ui";
 
-type Props = {
+interface Props {
   passedThreshold?: boolean;
   direction?: 'up' | 'down';
   menuItems:  Record<string, MenuItem[]>
   isMobile?: boolean;
-};
+}
 
-export const Nav = ({
+export const Nav: FC<Props> = ({
   passedThreshold,
   direction,
   menuItems,
   isMobile
-}: Props) => {
+}) => {
   return (
     <nav
       className={`
@@ -23,7 +24,7 @@ export const Nav = ({
       `}
     >
       <div className="container">
-        <ul className={`menu ${isMobile && 'mobile-menu'}`}>
+        <ul className={`menu ${isMobile && 'drawer-nav mobile-menu'}`}>
           <NavItem label="Demos" items={menuItems.Demos} />
           <NavItem label="Post" items={menuItems.Post} />
           <NavItem label="Features" items={menuItems.Features} />
